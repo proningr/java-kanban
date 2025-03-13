@@ -10,8 +10,8 @@ public class Main {
 
         Task learningToModify = new Task(learning.getId(), "Выучить java", "Пройти курс на Я.Практкум",
                 Status.IN_PROGRESS);
-        Task cleaningModified = taskManager.updateTask(learningToModify);
-        System.out.println(cleaningModified);
+        Task learningModified = taskManager.updateTask(learningToModify);
+        System.out.println(learningModified);
 
 
         Epic roomRedesign = new Epic("Сделать ремонт комнаты", "Постелить новые полы");
@@ -27,7 +27,7 @@ public class Main {
         roomRedesignStepTwo.setStatus(Status.DONE);
         taskManager.updateSubtask(roomRedesignStepTwo);
         System.out.println(roomRedesign);
-        System.out.println("Точка останова");
+
 
     }
 }
