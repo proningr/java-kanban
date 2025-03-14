@@ -1,4 +1,9 @@
+package task;
+import enums.Status;
+
 public class Subtask extends Task {
+
+
 
     private int epicID;
 
