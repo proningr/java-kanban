@@ -1,3 +1,7 @@
+package task;
+
+import enums.Status;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -28,7 +32,6 @@ public class Epic extends Task {
     public ArrayList<Subtask> getSubtaskList() {
         return subTaskArray;
     }
-
 
 
     @Override
