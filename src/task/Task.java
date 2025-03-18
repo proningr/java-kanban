@@ -8,7 +8,8 @@ public class Task {
 
     private String name;
     private String description;
-    private Integer id;;
+    private Integer id;
+
     private Status status;
 
     public Task(int id, String name, String description, Status status) {
@@ -54,12 +55,11 @@ public class Task {
         this.status = status;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status;
+        return Objects.equals(id, task.id) && Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status;
     }
 
     @Override
