@@ -1,7 +1,13 @@
 package manager;
-import java.util.*;
-import task.*;
+
 import enums.Status;
+import task.Epic;
+import task.Subtask;
+import task.Task;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TaskManager {
 
@@ -18,8 +24,6 @@ public class TaskManager {
     public void addTask(Task task) {
         task.setId(getNextID());
         registeredTasks.put(task.getId(), task);
-
-
     }
 
     public void addEpic(Epic epic) {
@@ -35,7 +39,6 @@ public class TaskManager {
         registeredSubtasks.put(subtask.getId(), subtask);
         updateEpicStatus(epic);
 
-
     }
 
     public Task updateTask(Task task) {
@@ -47,16 +50,8 @@ public class TaskManager {
     }
 
     public Epic updateEpic(Epic epic) {
-        if (epic == null || !registeredEpics.containsKey(epic.getId())){
+        if (epic == null || !registeredEpics.containsKey(epic.getId())) {
             return epic;
-
-        }
-        Epic oldEpic = registeredEpics.get(epic.getId());
-        ArrayList<Subtask> oldEpicSubtaskList = oldEpic.getSubtaskList();
-        if (!oldEpicSubtaskList.isEmpty()) {
-            for (Subtask subtask : oldEpicSubtaskList) {
-                registeredSubtasks.remove(subtask.getId());
-            }
         }
         registeredEpics.replace(epic.getId(), epic);
         updateEpicStatus(epic);
@@ -64,17 +59,15 @@ public class TaskManager {
     }
 
     public Subtask updateSubtask(Subtask subtask) {
-        if (subtask == null || !registeredSubtasks.containsKey(subtask.getId())){
+        if (subtask == null || !registeredSubtasks.containsKey(subtask.getId())) {
             return subtask;
         }
-        int epicID = subtask.getEpicID();
         Subtask oldSubtask = registeredSubtasks.get(subtask.getId());
         registeredSubtasks.replace(subtask.getId(), subtask);
-        Epic epic = registeredEpics.get(epicID);
+        Epic epic = registeredEpics.get(subtask.getEpicID());
         ArrayList<Subtask> subtaskList = epic.getSubtaskList();
         subtaskList.remove(oldSubtask);
         subtaskList.add(subtask);
-        epic.setSubtaskList(subtaskList);
         updateEpicStatus(epic);
         return subtask;
     }
@@ -138,22 +131,17 @@ public class TaskManager {
     }
 
     public void deleteSubtaskByID(int id) {
-        Subtask subtask = registeredSubtasks.get(id);
+        Subtask subtask = registeredSubtasks.remove(id);
         int epicID = subtask.getEpicID();
-        registeredSubtasks.remove(id);
         Epic epic = registeredEpics.get(epicID);
-        ArrayList<Subtask> subtaskList = epic.getSubtaskList();
-        subtaskList.remove(subtask);
-        epic.setSubtaskList(subtaskList);
         updateEpicStatus(epic);
-
 
     }
 
     private void updateEpicStatus(Epic epic) {
         int doneCount = 0;
         int newCount = 0;
-        ArrayList<Subtask> list = epic.getSubtaskList();
+        ArrayList<Subtask> list = new ArrayList<>(epic.getSubtaskList());
 
         for (Subtask subtask : list) {
             if (subtask.getStatus() == Status.DONE) {
@@ -170,7 +158,7 @@ public class TaskManager {
         } else {
             epic.setStatus(Status.IN_PROGRESS);
         }
-    }
 
+    }
 
 }

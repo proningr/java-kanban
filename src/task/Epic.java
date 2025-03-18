@@ -24,7 +24,6 @@ public class Epic extends Task {
         subTaskArray.clear();
     }
 
-
     public void setSubtaskList(ArrayList<Subtask> subtaskList) {
         this.subTaskArray = subtaskList;
     }
@@ -32,7 +31,6 @@ public class Epic extends Task {
     public ArrayList<Subtask> getSubtaskList() {
         return subTaskArray;
     }
-
 
     @Override
     public String toString() {

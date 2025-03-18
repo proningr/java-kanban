@@ -1,9 +1,8 @@
 package task;
+
 import enums.Status;
 
 public class Subtask extends Task {
-
-
 
     private int epicID;
 
@@ -11,6 +10,7 @@ public class Subtask extends Task {
         super(name, description);
         this.epicID = epicID;
     }
+
     public Subtask(int id, String name, String description, Status status, int epicID) {
         super(id, name, description, status);
         this.epicID = epicID;
@@ -24,10 +24,10 @@ public class Subtask extends Task {
     public String toString() {
         return "Subtask{" +
                 "name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status" + getStatus() +
-                ", epicID=" + epicID +
-                ", ID=" + getId() +
+                ", description = '" + getDescription() + '\'' +
+                ", status = " + getStatus() +
+                ", epicID = " + epicID +
+                ", ID = " + getId() +
                 '}';
     }
 }
