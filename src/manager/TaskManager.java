@@ -29,7 +29,6 @@ public class TaskManager {
     public void addEpic(Epic epic) {
         epic.setId(getNextID());
         registeredEpics.put(epic.getId(), epic);
-
     }
 
     public void addSubtask(Subtask subtask) {
@@ -38,7 +37,6 @@ public class TaskManager {
         epic.addSubtask(subtask);
         registeredSubtasks.put(subtask.getId(), subtask);
         updateEpicStatus(epic);
-
     }
 
     public Task updateTask(Task task) {
@@ -114,7 +112,6 @@ public class TaskManager {
         for (Epic epic : registeredEpics.values()) {
             epic.clearSubtasks();
             epic.setStatus(Status.NEW);
-
         }
     }
 
@@ -132,10 +129,10 @@ public class TaskManager {
 
     public void deleteSubtaskByID(int id) {
         Subtask subtask = registeredSubtasks.remove(id);
-        int epicID = subtask.getEpicID();
-        Epic epic = registeredEpics.get(epicID);
+        Epic epic = registeredEpics.get(subtask.getEpicID());
+        ArrayList<Subtask> subtaskList = epic.getSubtaskList();
+        subtaskList.remove(subtask);
         updateEpicStatus(epic);
-
     }
 
     private void updateEpicStatus(Epic epic) {
