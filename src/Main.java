@@ -54,12 +54,10 @@ public class Main {
 
         Subtask updateRedesignStepNewFour = new Subtask(roomRedesignStepNewFour.getId(), "Купить ковер", "Синего цвета", Status.DONE, roomRedesignNew.getId());
         taskManager.updateSubtask(updateRedesignStepNewFour);
-        taskManager.deleteSubtasks();
         Epic testEpic = new Epic("Протестироваться", "Создать новый эпик");
         taskManager.addEpic(testEpic);
         Epic newTestEpic = new Epic("ЕщЕ один пустой эпик", "Статус должен быть NEW");
         taskManager.addEpic(newTestEpic);
         System.out.println(roomRedesign);
-        System.out.println(0);
     }
 }
