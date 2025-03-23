@@ -59,20 +59,24 @@ class InMemoryTaskManagerTest {
     @Test
     public void addingTaskShouldNotModifyOriginalTaskObject() {
         Task originalTask = new Task(1, "Оч оригинальное название", "Крутое описание", Status.NEW);
-        Task copyOfOriginalTask = new Task(originalTask.getId(), originalTask.getName(), originalTask.getDescription(), originalTask.getStatus());
+        Task copyOfOriginalTask = new Task(originalTask.getId(), originalTask.getName(), originalTask.getDescription(),
+                originalTask.getStatus());
         taskManager.addTask(originalTask);
         assertEquals(originalTask.getName(), copyOfOriginalTask.getName(), "Имя не должно быть изменено.");
-        assertEquals(originalTask.getDescription(), copyOfOriginalTask.getDescription(), "Описание не должно быть изменено.");
+        assertEquals(originalTask.getDescription(), copyOfOriginalTask.getDescription(),
+                "Описание не должно быть изменено.");
         assertEquals(originalTask.getStatus(), copyOfOriginalTask.getStatus(), "Статус не должен быть изменен.");
     }
 
     @Test
     public void addingEpicShouldNotModifyOriginalEpicObject() {
         Epic originalEpic = new Epic(1, "Оч оригинальное название", "Крутое описание", Status.NEW);
-        Epic copyOfOriginalEpic = new Epic(originalEpic.getId(), originalEpic.getName(), originalEpic.getDescription(), originalEpic.getStatus());
+        Epic copyOfOriginalEpic = new Epic(originalEpic.getId(), originalEpic.getName(), originalEpic.getDescription(),
+                originalEpic.getStatus());
         taskManager.addEpic(originalEpic);
         assertEquals(originalEpic.getName(), copyOfOriginalEpic.getName(), "Имя не должно быть изменено.");
-        assertEquals(originalEpic.getDescription(), copyOfOriginalEpic.getDescription(), "Описание не должно быть изменено.");
+        assertEquals(originalEpic.getDescription(), copyOfOriginalEpic.getDescription(),
+                "Описание не должно быть изменено.");
         assertEquals(originalEpic.getStatus(), copyOfOriginalEpic.getStatus(), "Статус не должен быть изменен.");
 
     }
@@ -81,13 +85,18 @@ class InMemoryTaskManagerTest {
     public void addingSubtaskShouldNotModifyOriginalSubtaskObject() {
         Epic originalEpic = new Epic(666, "Оч оригинальное название", "Крутое описание", Status.NEW);
         taskManager.addEpic(originalEpic);
-        Subtask originalSubtask = new Subtask(1, "Оч оригинальное название", "Крутое описание", Status.NEW, originalEpic.getId());
-        Subtask copyOfOriginalSubtask = new Subtask(originalSubtask.getId(), originalSubtask.getName(), originalSubtask.getDescription(), originalSubtask.getStatus(), originalSubtask.getEpicID());
+        Subtask originalSubtask = new Subtask(1, "Оч оригинальное название", "Крутое описание",
+                Status.NEW, originalEpic.getId());
+        Subtask copyOfOriginalSubtask = new Subtask(originalSubtask.getId(), originalSubtask.getName(),
+                originalSubtask.getDescription(), originalSubtask.getStatus(), originalSubtask.getEpicID());
         taskManager.addSubtask(originalSubtask);
         assertEquals(originalSubtask.getName(), copyOfOriginalSubtask.getName(), "Имя не должно быть изменено.");
-        assertEquals(originalSubtask.getDescription(), copyOfOriginalSubtask.getDescription(), "Описание не должно быть изменено.");
-        assertEquals(originalSubtask.getStatus(), copyOfOriginalSubtask.getStatus(), "Статус не должен быть изменен.");
-        assertEquals(originalSubtask.getEpicID(), copyOfOriginalSubtask.getEpicID(), "Epic ID не должен быть изменен.");
+        assertEquals(originalSubtask.getDescription(), copyOfOriginalSubtask.getDescription(),
+                "Описание не должно быть изменено.");
+        assertEquals(originalSubtask.getStatus(), copyOfOriginalSubtask.getStatus(),
+                "Статус не должен быть изменен.");
+        assertEquals(originalSubtask.getEpicID(), copyOfOriginalSubtask.getEpicID(),
+                "Epic ID не должен быть изменен.");
     }
 
     @Test
