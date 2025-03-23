@@ -1,7 +1,6 @@
 import enums.Status;
-import manager.InMemoryHistoryManager;
-import manager.InMemoryTaskManager;
 import manager.Managers;
+import manager.TaskManager;
 import task.Epic;
 import task.Subtask;
 import task.Task;
@@ -10,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        InMemoryTaskManager inMemoryTaskManag = Managers.getDefault();
+        TaskManager inMemoryTaskManag = Managers.getDefault();
         Task learning = new Task("Выучить java", "Пройти курс на STEPIC");
         inMemoryTaskManag.addTask(learning);
 
@@ -61,5 +60,6 @@ public class Main {
         Epic newTestEpic = new Epic("ЕщЕ один пустой эпик", "Статус должен быть NEW");
         inMemoryTaskManag.addEpic(newTestEpic);
         System.out.println(roomRedesign);
+
     }
 }

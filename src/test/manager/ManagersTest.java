@@ -1,6 +1,4 @@
-package test.forManager;
-
-import manager.*;
+package manager;
 import org.junit.jupiter.api.Test;
 
 

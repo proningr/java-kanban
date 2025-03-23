@@ -7,8 +7,8 @@ import task.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -81,20 +81,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskByID(int id) {
-        historyManager.add(registeredTasks.get(id));
-        return registeredTasks.get(id);
+        Task task = registeredTasks.get(id);
+        if (task != null) {
+            historyManager.add(task);
+        }
+        return task;
     }
 
     @Override
     public Epic getEpicByID(int id) {
-        historyManager.add(registeredEpics.get(id));
-        return registeredEpics.get(id);
+        Epic epic = registeredEpics.get(id);
+        if (epic != null) {
+            historyManager.add(epic);
+        }
+        return epic;
     }
 
     @Override
     public Subtask getSubtaskByID(int id) {
-        historyManager.add(registeredSubtasks.get(id));
-        return registeredSubtasks.get(id);
+        Subtask subtask = registeredSubtasks.get(id);
+        if (subtask != null) {
+            historyManager.add(subtask);
+        }
+        return subtask;
     }
 
     @Override
@@ -136,6 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(Status.NEW);
         }
     }
+
     @Override
     public void deleteTaskByID(int id) {
         registeredTasks.remove(id);
@@ -163,6 +173,7 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
+
     private void updateEpicStatus(Epic epic) {
         int doneCount = 0;
         int newCount = 0;

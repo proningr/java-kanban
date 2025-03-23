@@ -1,10 +1,8 @@
-package test.forTask;
-import task.*;
-
-import org.junit.jupiter.api.Test;
+package task;
 import enums.Status;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EpicTest {
 

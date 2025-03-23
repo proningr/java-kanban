@@ -1,8 +1,6 @@
-package test.forManager;
+package manager;
 
 import enums.Status;
-import manager.Managers;
-import manager.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import task.Epic;
@@ -18,7 +16,7 @@ class InMemoryTaskManagerTest {
     private static TaskManager taskManager;
 
     @BeforeEach
-    public void beforeEach() {
+    public void setUp() {
         taskManager = Managers.getDefault();
     }
 
@@ -153,6 +151,115 @@ class InMemoryTaskManagerTest {
         taskManager.deleteSubtasks();
         List<Subtask> subtasks = taskManager.getSubtasks();
         assertTrue(subtasks.isEmpty(), "После удаления подзадач список должен быть пуст.");
+    }
+
+    @Test
+    public void deleteTaskByIDShouldRemoveTask() {
+        Task task = new Task("Test Task", "Test Description");
+        taskManager.addTask(task);
+        int taskId = task.getId();
+        taskManager.deleteTaskByID(taskId);
+        assertNull(taskManager.getTaskByID(taskId), "Задача должна быть удалена.");
+        assertTrue(taskManager.getTasks().isEmpty(), "Список задач должен быть пуст.");
+    }
+
+    @Test
+    public void deleteEpicByIDShouldRemoveEpic() {
+        Epic epic = new Epic("Test Epic", "Test Description");
+        taskManager.addEpic(epic);
+        int epicId = epic.getId();
+        Subtask subtask1 = new Subtask("Subtask 1", "Description 1", epicId);
+        taskManager.addSubtask(subtask1);
+        Subtask subtask2 = new Subtask("Subtask 2", "Description 2", epicId);
+        taskManager.addSubtask(subtask2);
+        taskManager.deleteEpicByID(epicId);
+        assertNull(taskManager.getEpicByID(epicId), "Эпик должен быть удален.");
+        assertTrue(taskManager.getSubtasks().isEmpty(), "Подзадачи эпика должны быть удалены.");
+    }
+
+    @Test
+    public void deleteSubtaskByIDShouldRemoveSubtask() {
+        Epic epic = new Epic("Test Epic", "Test Description");
+        taskManager.addEpic(epic);
+        int epicId = epic.getId();
+        Subtask subtask = new Subtask("Test Subtask", "Test Description", epicId);
+        taskManager.addSubtask(subtask);
+        int subtaskId = subtask.getId();
+        taskManager.deleteSubtaskByID(subtaskId);
+        assertNull(taskManager.getSubtaskByID(subtaskId), "Подзадача должна быть удалена.");
+        assertTrue(taskManager.getSubtasks().isEmpty(), "Список подзадач должен быть пуст.");
+    }
+
+    @Test
+    public void getSubtasksByEpicDirectlyShouldReturnCorrectSubtasks() {
+        Epic epic = new Epic("Test Epic", "Test Description");
+        taskManager.addEpic(epic);
+        int epicId = epic.getId();
+        Subtask subtask1 = new Subtask("Subtask 1", "Description 1", epicId);
+        taskManager.addSubtask(subtask1);
+        Subtask subtask2 = new Subtask("Subtask 2", "Description 2", epicId);
+        taskManager.addSubtask(subtask2);
+        Epic retrievedEpic = taskManager.getEpicByID(epicId);
+        assertNotNull(retrievedEpic, "Эпик не должен быть null.");
+        List<Subtask> subtasksForEpic = retrievedEpic.getSubtaskList();
+        assertNotNull(subtasksForEpic, "Список подзадач не должен быть null.");
+        assertEquals(2, subtasksForEpic.size(), "Список должен содержать 2 подзадачи.");
+        assertTrue(subtasksForEpic.contains(subtask1), "Список должен содержать subtask1.");
+        assertTrue(subtasksForEpic.contains(subtask2), "Список должен содержать subtask2.");
+    }
+
+    @Test
+    public void getHistoryShouldReturnOldTaskAfterUpdate() {
+        Task testTask = new Task("Задача для замены", "Тестирую что при заменей данной " +
+                "задачи - все корректно");
+        taskManager.addTask(testTask);
+        taskManager.getTaskByID(testTask.getId());
+        taskManager.updateTask(new Task(testTask.getId(), "UPD Задача",
+                "Обновили задачу", Status.DONE));
+        List<Task> tasks = taskManager.getHistory();
+        Task oldTask = tasks.getFirst();
+        assertEquals(testTask.getName(), oldTask.getName(), "В истории не сохранилась старая версия задачи");
+        assertEquals(testTask.getDescription(), oldTask.getDescription(),
+                "В истории не сохранилась старая версия задачи");
+        assertEquals(testTask.getId(), oldTask.getId(),
+                "ID не совпадает!");
+    }
+
+    @Test
+    public void getHistoryShouldReturnOldEpicAfterUpdate() {
+        Epic testEpic = new Epic("Эпик для замены", "Тестирую что при заменей данного " +
+                "эпика - все корректно");
+        taskManager.addEpic(testEpic);
+        taskManager.getEpicByID(testEpic.getId());
+        taskManager.updateEpic(new Epic(testEpic.getId(), "UPD Эпик",
+                "Обновили эпик", Status.DONE));
+        List<Task> epics = taskManager.getHistory();
+        Epic oldEpic = (Epic) epics.getFirst();
+        assertEquals(testEpic.getName(), oldEpic.getName(), "В истории не сохранилась старая версия задачи");
+        assertEquals(testEpic.getDescription(), oldEpic.getDescription(),
+                "В истории не сохранилась старая версия задачи");
+        assertEquals(testEpic.getId(), oldEpic.getId(),
+                "ID не совпадает!");
+    }
+
+    @Test
+    public void getHistoryShouldReturnOldSubtaskAfterUpdate() {
+        Epic anyEpic = new Epic("Какой то эпик", "Какое то описание");
+        taskManager.addEpic(anyEpic);
+        Subtask anySubtask = new Subtask("Какая то подзадача", "Какое то описание",
+                anyEpic.getId());
+        taskManager.addSubtask(anySubtask);
+        taskManager.getSubtaskByID(anySubtask.getId());
+        taskManager.updateSubtask(new Subtask(anySubtask.getId(), "Новое имя",
+                "новое описание", Status.IN_PROGRESS, anyEpic.getId()));
+        List<Task> subtasks = taskManager.getHistory();
+        Subtask oldSubtask = (Subtask) subtasks.getFirst();
+        assertEquals(anySubtask.getName(), oldSubtask.getName(),
+                "В истории не сохранилась старая версия эпика");
+        assertEquals(anySubtask.getDescription(), oldSubtask.getDescription(),
+                "В истории не сохранилась старая версия эпика");
+        assertEquals(oldSubtask.getId(), anySubtask.getId(),
+                "ID не совпадает!");
     }
 
 
